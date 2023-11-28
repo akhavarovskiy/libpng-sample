@@ -14,7 +14,7 @@
   #define DEBUG_PRINT(...)
 #endif
 
-namespace image
+namespace img
 {
   enum PNG_BIT_DEPTH : uint8_t {
     ONE     = (1 << 0),
