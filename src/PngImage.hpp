@@ -4,7 +4,6 @@
 #include <vector>
 #include <cstdint>
 #include <string>
-#include <filesystem>
 #include <png.h>
 #include <assert.h>
 
@@ -70,6 +69,11 @@ namespace img
   typedef std::vector<PNG_PIXEL_RGBA_8>     PNG_PIXEL_RGBA_8_ROW;
   typedef std::vector<PNG_PIXEL_RGBA_8_ROW> PNG_PIXEL_RGBA_8_ROWS;
 
+  // struct PNG_PIXEL_RGBA_16 : public PNG_PIXEL_RGBA<uint16_t> {
+  //   operator uint64_t (void) const {
+  //     return (uint64_t)rgba.r << 48 | (uint64_t)rgba.g << 32 | (uint64_t)rgba.b << 16 | (uint64_t)rgba.a;
+  //   }
+  // };
   typedef PNG_PIXEL_RGBA<uint16_t>           PNG_PIXEL_RGBA_16;
   typedef std::vector<PNG_PIXEL_RGBA_16>     PNG_PIXEL_RGBA_16_ROW;
   typedef std::vector<PNG_PIXEL_RGBA_16_ROW> PNG_PIXEL_RGBA_16_ROWS;
@@ -109,24 +113,24 @@ namespace img
   public:
     /// @brief Construct PNG structure from file path
     /// @param other
-    PNG(std::filesystem::path path) {
+    PNG(std::string path) {
       // Check if path is not empty
-      if(path.empty() == true)
+      if(path.size() == 0)
         throw std::runtime_error("Path cannot be empty");
 
       // Check that the file exists
-      if(std::filesystem::exists(path) == false)
-        throw std::runtime_error("File does not exist");
+ //     if(std::filesystem::exists(path) == false)
+ //       throw std::runtime_error("File does not exist");
 
       // Check that the file is a regular file
-      if(std::filesystem::is_regular_file(path) == false)
-        throw std::runtime_error("Path is not a regular file");
+//      if(std::filesystem::is_regular_file(path) == false)
+//        throw std::runtime_error("Path is not a regular file");
 
       // Convert relative path to absolute path
-      std::filesystem::path absolute_path = std::filesystem::absolute(path);
+ //     std::filesystem::path absolute_path = std::filesystem::absolute(path);
 
       // Try and open the file
-      std::FILE *fp = std::fopen(absolute_path.c_str(), "rb");
+      std::FILE *fp = std::fopen(path.c_str(), "rb");
       if(fp == NULL)
         throw std::runtime_error("Could not open file");
 
@@ -266,7 +270,7 @@ namespace img
     }
 
     // Save the file
-    void saveToFile(std::filesystem::path path) {
+    void saveToFile(std::string path) {
       FILE * fp = fopen(path.c_str(), "wb");
       if(fp == NULL) return;
 
